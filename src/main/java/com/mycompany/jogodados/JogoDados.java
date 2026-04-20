@@ -1,6 +1,25 @@
-public class Main {
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ */
+package com.mycompany.jogodados;
+
+import com.formdev.flatlaf.FlatDarkLaf;
+
+/**
+ *
+ * @author contm
+ */
+public class JogoDados {
 
     public static void main(String[] args) {
+
+        try {
+            FlatDarkLaf.setup(); // Configura o tema Light
+        } catch (Exception ex) {
+            System.err.println("Falha ao inicializar o FlatLaf");
+        }
+        JanelaJogo janela = new JanelaJogo();
+        janela.setVisible(true);
 
         // Metas das rodadas
         int[] metas = {20, 30, 40};
