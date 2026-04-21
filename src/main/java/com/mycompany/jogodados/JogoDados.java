@@ -1,6 +1,21 @@
+<<<<<<< HEAD:Main.java
 import java.util.Scanner;
 
 public class Main {
+=======
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ */
+package com.mycompany.jogodados;
+
+import com.formdev.flatlaf.FlatDarkLaf;
+
+/**
+ *
+ * @author contm
+ */
+public class JogoDados {
+>>>>>>> caf0e75dc9aa442400f2087801e0cad852232db8:src/main/java/com/mycompany/jogodados/JogoDados.java
 
     // GERENCIAMENTO DE DADOS
     public static void gerenciarDados(Jogador jogador, Dado novoDado, Scanner sc) {
@@ -113,9 +128,22 @@ public class Main {
 
     public static void main(String[] args) {
 
+<<<<<<< HEAD:Main.java
         Scanner sc = new Scanner(System.in);
 
         int[] metas = {10, 20, 30};
+=======
+        try {
+            FlatDarkLaf.setup(); // Configura o tema Light
+        } catch (Exception ex) {
+            System.err.println("Falha ao inicializar o FlatLaf");
+        }
+        JanelaJogo janela = new JanelaJogo();
+        janela.setVisible(true);
+
+        // Metas das rodadas
+        int[] metas = {20, 30, 40};
+>>>>>>> caf0e75dc9aa442400f2087801e0cad852232db8:src/main/java/com/mycompany/jogodados/JogoDados.java
 
         Jogador jogador = new Jogador();
 
