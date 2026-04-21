@@ -1,7 +1,7 @@
 public class Carta {
 
     private String nome;
-    private String tipo; // "multiplicador" ou "bonus"
+    private String tipo; // multiplicador ou bonus
 
     // Construtor
     public Carta(String nome, String tipo) {

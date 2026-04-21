@@ -3,35 +3,75 @@ import java.util.ArrayList;
 public class Jogador {
 
     private ArrayList<Dado> dados;
+    private ArrayList<Carta> cartas;
     private int pontos;
 
     // Construtor
     public Jogador() {
         this.dados = new ArrayList<>();
+        this.cartas = new ArrayList<>();
         this.pontos = 0;
     }
 
-    // Adicionar dado
+    // DADOS
+
     public void adicionarDado(Dado dado) {
-        dados.add(dado);
+        if (dados.size() < 10) {
+            dados.add(dado);
+        } else {
+            System.out.println("Limite de 10 dados atingido!");
+        }
     }
 
-    // Getter dos dados
+    public void removerDado(int index) {
+        if (index >= 0 && index < dados.size()) {
+            dados.remove(index);
+        }
+    }
+
     public ArrayList<Dado> getDados() {
         return dados;
     }
 
-    // Getter dos pontos
+    // CARTAS
+
+    public void adicionarCarta(Carta carta) {
+        if (cartas.size() < 3) {
+            cartas.add(carta);
+        } else {
+            System.out.println("Limite de 3 cartas atingido!");
+        }
+    }
+
+    public void removerCarta(int index) {
+        if (index >= 0 && index < cartas.size()) {
+            cartas.remove(index);
+        }
+    }
+
+    public ArrayList<Carta> getCartas() {
+        return cartas;
+    }
+
+    // PONTOS
+
     public int getPontos() {
         return pontos;
     }
 
-    // Adicionar pontos
     public void adicionarPontos(int valor) {
         pontos += valor;
     }
 
-    // Resetar pontos
+    public boolean gastarPontos(int valor) {
+        if (pontos >= valor) {
+            pontos -= valor;
+            return true;
+        }
+        return false;
+    }
+
+    // Reset
     public void resetarPontos() {
         pontos = 0;
     }
