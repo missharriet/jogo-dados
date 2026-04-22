@@ -263,24 +263,77 @@ public class JanelaJogo extends JFrame {
     private void adicionarBotaoLoja(JDialog dialog, String texto, int custo, Dado dado, Carta carta, JLabel lblInfo) {
         JButton btn = new JButton(texto);
         btn.addActionListener(e -> {
-            if (jogador.gastarPontos(custo)) {
+            
+            // 1. Verifica se o jogador tem os pontos 
+            if (jogador.getPontos() >= custo) {
+                
                 if (dado != null) {
                     if (jogador.getDados().size() >= 10) {
-                        jogador.removerDado(0); 
+                        // 2. Prepara a lista de opções com os dados atuais
+                        String[] opcoes = new String[jogador.getDados().size()];
+                        for (int i = 0; i < jogador.getDados().size(); i++) {
+                            opcoes[i] = "Posição " + (i + 1) + " - " + jogador.getDados().get(i).getNome();
+                        }
+
+                        // 3. Mostra o diálogo para o usuário escolher qual dado substituir
+                        String escolha = (String) JOptionPane.showInputDialog(
+                                dialog,
+                                "Limite de 10 dados atingido!\nEscolha qual dado você deseja substituir:",
+                                "Substituir dado",
+                                JOptionPane.QUESTION_MESSAGE,
+                                null,
+                                opcoes,
+                                opcoes[0]
+                        );
+
+                        // 4. Se o usuário fez uma escolha 
+                        if (escolha != null) {
+                            // Encontra o índice da escolha
+                            int index = -1;
+                            for (int i = 0; i < opcoes.length; i++) {
+                                if (opcoes[i].equals(escolha)) {
+                                    index = i;
+                                    break;
+                                }
+                            }
+
+                            // 5. Gasta os pontos e faz a substituição
+                            if (index != -1) {
+                                jogador.gastarPontos(custo);
+                                jogador.removerDado(index);
+                                jogador.adicionarDado(dado);
+                                
+                                lblInfo.setText("Pontos disponíveis: " + jogador.getPontos());
+                                lblPontos.setText("Pontos: " + jogador.getPontos());
+                                JOptionPane.showMessageDialog(dialog, "Compra efetuada com sucesso! Dado substituído.");
+                            }
+                        } else {
+                            // Usuário fechou a janela ou clicou em cancelar
+                            JOptionPane.showMessageDialog(dialog, "Compra cancelada.");
+                        }
+                        
+                    } else {
+                        // Tem menos de 10 dados, pode comprar direto
+                        jogador.gastarPontos(custo);
+                        jogador.adicionarDado(dado);
+                        
+                        lblInfo.setText("Pontos disponíveis: " + jogador.getPontos());
+                        lblPontos.setText("Pontos: " + jogador.getPontos());
+                        JOptionPane.showMessageDialog(dialog, "Compra efetuada com sucesso!");
                     }
-                    jogador.adicionarDado(dado);
+                    
                 } else if (carta != null) {
                     if (jogador.getCartas().size() < 3) {
+                        jogador.gastarPontos(custo);
                         jogador.adicionarCarta(carta);
+                        
+                        lblInfo.setText("Pontos disponíveis: " + jogador.getPontos());
+                        lblPontos.setText("Pontos: " + jogador.getPontos());
+                        JOptionPane.showMessageDialog(dialog, "Compra efetuada com sucesso!");
                     } else {
-                        jogador.adicionarPontos(custo); 
                         JOptionPane.showMessageDialog(dialog, "Limite de 3 cartas atingido!");
-                        return;
                     }
                 }
-                lblInfo.setText("Pontos disponíveis: " + jogador.getPontos());
-                lblPontos.setText("Pontos: " + jogador.getPontos());
-                JOptionPane.showMessageDialog(dialog, "Compra efetuada com sucesso!");
             } else {
                 JOptionPane.showMessageDialog(dialog, "Pontos insuficientes!", "Erro", JOptionPane.ERROR_MESSAGE);
             }

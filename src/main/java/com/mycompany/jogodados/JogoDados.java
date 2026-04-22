@@ -14,7 +14,7 @@ public class JogoDados {
     public static void main(String[] args) {
 
         try {
-            FlatDarkLaf.setup(); // Configura o tema Light
+            FlatDarkLaf.setup(); // Configura o tema escuro
         } catch (Exception ex) {
             System.err.println("Falha ao inicializar o FlatLaf");
         }
