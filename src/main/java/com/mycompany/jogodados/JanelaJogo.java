@@ -47,7 +47,7 @@ public class JanelaJogo extends JFrame {
         lblRodada.setFont(new Font("SansSerif", Font.BOLD, 24));
         lblRodada.setForeground(Color.WHITE);
 
-        lblMeta = new JLabel("Meta a atingir: " + metas[0], SwingConstants.CENTER);
+        lblMeta = new JLabel("Meta: " + metas[0], SwingConstants.CENTER);
         lblMeta.setFont(new Font("SansSerif", Font.PLAIN, 18));
         lblMeta.setForeground(new Color(255, 215, 0));
 
