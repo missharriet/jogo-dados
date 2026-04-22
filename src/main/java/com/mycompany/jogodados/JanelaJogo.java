@@ -201,7 +201,7 @@ public class JanelaJogo extends JFrame {
 
         if (rodadaAtual < metas.length) {
             lblRodada.setText("Rodada: " + (rodadaAtual + 1) + " de " + metas.length);
-            lblMeta.setText("Meta a atingir: " + metas[rodadaAtual]);
+            lblMeta.setText("Meta: " + metas[rodadaAtual]);
         } else {
             // Vitória final 
             jogoTerminado = true;
