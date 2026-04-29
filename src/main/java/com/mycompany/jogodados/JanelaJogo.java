@@ -23,6 +23,7 @@ public class JanelaJogo extends JFrame {
     private JLabel[] labelsDados;
     private JButton btnRolar;
     private JButton btnLoja;
+    private RolagemThread threadAnimacao;
 
     public JanelaJogo() {
         setTitle("Jogo de Dados - Arena");
@@ -116,7 +117,7 @@ public class JanelaJogo extends JFrame {
     }
 
     private void executarRodada() {
-        // botão para reiniciar
+        // Se o jogo já acabou, o botão funciona como "Reiniciar"
         if (jogoTerminado) {
             reiniciarJogo();
             return;
@@ -124,9 +125,29 @@ public class JanelaJogo extends JFrame {
 
         if (rodadaAtual >= metas.length) return;
 
+        // 1. Bloqueia os botões para evitar múltiplos cliques durante a animação
+        btnRolar.setEnabled(false);
+        btnLoja.setEnabled(false);
+        lblStatusGeral.setText("Rolando os dados...");
+        lblStatusGeral.setForeground(new Color(241, 196, 15)); // Amarelo
+
+        // 2. Inicia a thread de animação visual
+        threadAnimacao = new RolagemThread(labelsDados, jogador.getDados().size());
+        threadAnimacao.start();
+
+        // 3. Usa um Timer para parar a animação após 1 segundo (1000ms) e revelar o resultado
+        javax.swing.Timer timer = new javax.swing.Timer(1000, e -> {
+            threadAnimacao.parar();
+            calcularResultadoFinal();
+        });
+        timer.setRepeats(false); // Executa apenas uma vez
+        timer.start();
+    }
+
+    private void calcularResultadoFinal() {
         int soma = 0;
 
-        // Limpar visual anterior e rolar dados
+        // Limpar visual anterior e rolar dados reais
         for (int i = 0; i < 10; i++) {
             if (i < jogador.getDados().size()) {
                 Dado d = jogador.getDados().get(i);
@@ -153,21 +174,21 @@ public class JanelaJogo extends JFrame {
             }
         }
 
-        // Bónus gerais (Cartas)
+        // Bônus gerais de cartas
         for (Carta c : jogador.getCartas()) {
             if (c.getTipo().equals("bonus")) {
                 soma += jogador.getDados().size() * 8;
             }
         }
 
-        // Multiplicadores de Cartas
+        // Multiplicadores de cartas
         for (Carta c : jogador.getCartas()) {
             if (c.getTipo().equals("multiplicador")) {
                 soma *= 2;
             }
         }
 
-        // Multiplicadores de Dados Especiais
+        // Multiplicadores de dados especiais
         double multiExtra = 1.0;
         for (Dado d : jogador.getDados()) {
             if (d instanceof DadoMultiplicador25) {
@@ -193,6 +214,7 @@ public class JanelaJogo extends JFrame {
             jogoTerminado = true;
             btnRolar.setText("🔄 JOGAR NOVAMENTE");
             btnRolar.setBackground(new Color(52, 152, 219)); // Botão azul
+            btnRolar.setEnabled(true); // Libera botão para reiniciar
             btnLoja.setEnabled(false);
             return;
         }
@@ -202,6 +224,8 @@ public class JanelaJogo extends JFrame {
         if (rodadaAtual < metas.length) {
             lblRodada.setText("Rodada: " + (rodadaAtual + 1) + " de " + metas.length);
             lblMeta.setText("Meta: " + metas[rodadaAtual]);
+            btnRolar.setEnabled(true); // Reabilita para continuar
+            btnLoja.setEnabled(true);  // Reabilita loja
         } else {
             // Vitória final 
             jogoTerminado = true;
@@ -209,6 +233,7 @@ public class JanelaJogo extends JFrame {
             lblMeta.setText("Parabéns, sobreviveu à Arena!");
             btnRolar.setText("🔄 JOGAR NOVAMENTE");
             btnRolar.setBackground(new Color(52, 152, 219)); // Botão azul
+            btnRolar.setEnabled(true); // Libera botão para reiniciar
             btnLoja.setEnabled(false);
         }
     }
@@ -225,7 +250,7 @@ public class JanelaJogo extends JFrame {
 
         // Resetar interface visuais
         lblRodada.setText("Rodada: 1 de " + metas.length);
-        lblMeta.setText("Meta a atingir: " + metas[0]);
+        lblMeta.setText("Meta: " + metas[0]);
         lblPontos.setText("Pontos: 0");
         lblStatusGeral.setText("Clique em Rolar para começar!");
         
